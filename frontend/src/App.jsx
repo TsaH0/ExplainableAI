@@ -38,11 +38,11 @@ function App() {
 
       {/* Hero text when no graph */}
       {!res?.reasoning_graph && (
-        <div className="absolute top-32 left-0 right-0 text-center z-10 select-none">
-          <h1 className="text-xs uppercase tracking-[0.5em] text-white/30 font-bold mb-4">
+        <div className="absolute top-24 sm:top-32 left-0 right-0 text-center z-10 select-none px-4">
+          <h1 className="text-xs uppercase tracking-[0.3em] sm:tracking-[0.5em] text-white/30 font-bold mb-4">
             Explainable AI
           </h1>
-          <p className="text-lg text-white/60 max-w-md mx-auto font-light">
+          <p className="text-base sm:text-lg text-white/60 max-w-md mx-auto font-light">
             Interactive visualization of LLM logic paths.
           </p>
         </div>
@@ -59,36 +59,6 @@ function App() {
 
       {/* Chat input */}
       <ChatBar />
-
-      {/* Legend when graph is shown */}
-      {res?.reasoning_graph && (
-        <div className="fixed top-24 left-8 z-40 animate-fade-in">
-          <div className="bg-black/60 backdrop-blur-xl border border-white/5 rounded-xl p-4">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-white/30 font-bold block mb-3">
-              Node Types
-            </span>
-            <div className="flex flex-col gap-2">
-              {[
-                { type: "assumption", color: "#ff6b6b" },
-                { type: "inference", color: "#4ecdc4" },
-                { type: "calculation", color: "#ffd93d" },
-                { type: "decision", color: "#6c5ce7" },
-                { type: "conclusion", color: "#a8e6cf" },
-              ].map(({ type, color }) => (
-                <div key={type} className="flex items-center gap-2">
-                  <div
-                    className="size-2 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span className="text-[10px] font-mono text-white/40 capitalize">
-                    {type}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
