@@ -5,8 +5,7 @@ import { useResultStore } from "../store/useResultStore";
 
 export default function ChatBar() {
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { setRes } = useResultStore();
+  const { setRes, loading, setLoading } = useResultStore();
 
   const submitQuery = async () => {
     if (!query.trim()) {
@@ -19,8 +18,12 @@ export default function ChatBar() {
         model: "gemini-2.5-flash",
         query: query,
       });
-      setRes(res.data);
+      const data = res.data;
       setQuery("");
+      // Defer setting result so the loading spinner gets a
+      // chance to paint before Three.js blocks the main thread
+      await new Promise((r) => requestAnimationFrame(r));
+      setRes(data);
       toast.success("Reasoning graph generated");
     } catch (err) {
       toast.error(err?.message || "Something went wrong");

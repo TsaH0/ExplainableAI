@@ -45,11 +45,6 @@ export default function NodeDetail() {
         <p className="text-xs text-white/50 leading-relaxed">
           {selectedNode.description}
         </p>
-        <div className="mt-4 pt-3 border-t border-white/5">
-          <span className="text-[9px] font-mono text-white/20 uppercase tracking-wider">
-            Node {selectedNode.id}
-          </span>
-        </div>
       </div>
     </div>
   );

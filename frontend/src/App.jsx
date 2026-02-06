@@ -7,10 +7,23 @@ import AnswerPanel from "./Components/AnswerPanel";
 
 function App() {
   const res = useResultStore((state) => state.res);
+  const loading = useResultStore((state) => state.loading);
 
   return (
     <div className="relative h-screen w-screen bg-black overflow-hidden">
       <Navbar />
+
+      {/* Loading overlay */}
+      {loading && (
+        <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="loading-spinner" />
+            <span className="text-xs uppercase tracking-widest text-white/50 font-bold">
+              Generating reasoning graph...
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Background dot grid when no graph */}
       {!res?.reasoning_graph && (
@@ -27,7 +40,7 @@ function App() {
       {!res?.reasoning_graph && (
         <div className="absolute top-32 left-0 right-0 text-center z-10 select-none">
           <h1 className="text-xs uppercase tracking-[0.5em] text-white/30 font-bold mb-4">
-            Neural Reasoning Engine
+            Explainable AI
           </h1>
           <p className="text-lg text-white/60 max-w-md mx-auto font-light">
             Interactive visualization of LLM logic paths.
@@ -46,20 +59,6 @@ function App() {
 
       {/* Chat input */}
       <ChatBar />
-
-      {/* Status indicator */}
-      <div className="fixed bottom-4 right-8 z-50 pointer-events-none">
-        <div className="flex flex-col items-end gap-2 pointer-events-auto">
-          <div className="p-3 bg-black/60 border border-white/5 backdrop-blur-md rounded-lg flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <div className="size-1.5 rounded-full bg-white" />
-              <span className="text-[9px] uppercase tracking-wider text-white/40 font-bold">
-                {res ? `${res.reasoning_graph?.nodes?.length || 0} nodes` : "System Status: Active"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Legend when graph is shown */}
       {res?.reasoning_graph && (
