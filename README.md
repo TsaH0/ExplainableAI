@@ -76,6 +76,12 @@ cd ../frontend
 
 # Install dependencies
 npm install
+
+# Create .env file for local development
+cp .env.example .env
+
+# The .env file should contain:
+# VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ### 4. Running the Application
@@ -164,7 +170,7 @@ The visualization uses different colors to represent different types of reasonin
 
 ### Frontend
 - **React 19** - UI library
-- **Vite** - Next-generation frontend tooling
+- **Vite** - Next-generation frontend tooling with environment variable support
 - **TailwindCSS 4** - Utility-first CSS framework
 - **Zustand** - State management
 - **React Force Graph 3D** - 3D graph visualization
@@ -190,9 +196,14 @@ ExplainableAI/
 ├── frontend/
 │   ├── src/
 │   │   ├── Components/         # React components
+│   │   ├── config/             # Configuration files
+│   │   │   └── api.js          # API endpoint configuration
 │   │   ├── store/              # Zustand state management
 │   │   ├── App.jsx             # Main app component
 │   │   └── main.jsx            # Entry point
+│   ├── .env                    # Development environment variables
+│   ├── .env.production         # Production environment variables
+│   ├── .env.example            # Environment variables template
 │   ├── package.json            # Node dependencies
 │   └── vite.config.js          # Vite configuration
 └── README.md
@@ -210,7 +221,77 @@ GOOGLE_API_KEY=your_google_gemini_api_key
 
 ### Frontend Configuration
 
-The frontend is configured to connect to the backend at `http://localhost:8000`. To change this, update the API base URL in your frontend code.
+The frontend uses environment variables to configure the API endpoint. Create a `.env` file in the `frontend` directory:
+
+**For Development:**
+```env
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+**For Production:**
+```env
+VITE_API_BASE_URL=https://your-backend-url.com
+```
+
+The production environment variable is configured in `.env.production` and will be automatically used when you run `npm run build`.
+
+**Note:** Environment variables in Vite must be prefixed with `VITE_` to be exposed to the client-side code.
+
+## 🚢 Deployment
+
+### Building for Production
+
+#### Backend Deployment
+
+The backend can be deployed to any platform that supports Python applications (Heroku, Render, Railway, etc.):
+
+```bash
+cd backend
+
+# Make sure all dependencies are in requirements.txt
+pip freeze > requirements.txt
+
+# Set environment variables on your hosting platform:
+# GOOGLE_API_KEY=your_api_key_here
+```
+
+Most platforms will automatically detect the FastAPI application. You may need to specify:
+- **Start command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- **Python version**: 3.8+
+
+#### Frontend Deployment
+
+1. **Update Production API URL**
+
+   Edit `frontend/.env.production`:
+   ```env
+   VITE_API_BASE_URL=https://your-backend-url.com
+   ```
+
+2. **Build the Frontend**
+
+   ```bash
+   cd frontend
+   npm run build
+   ```
+
+   This creates an optimized production build in the `dist` directory.
+
+3. **Deploy to Static Hosting**
+
+   The built files can be deployed to:
+   - **Vercel**: `vercel deploy`
+   - **Netlify**: Drag and drop the `dist` folder or use Netlify CLI
+   - **GitHub Pages**: Push the `dist` folder to a `gh-pages` branch
+   - **Render**: Connect your repository and set build command to `npm run build`
+
+### Environment Variables Summary
+
+| Variable | Location | Purpose | Example |
+|----------|----------|---------|---------|
+| `GOOGLE_API_KEY` | Backend `.env` | Google Gemini API authentication | `AIza...` |
+| `VITE_API_BASE_URL` | Frontend `.env` | Backend API endpoint (development) | `http://localhost:8000` |
+| `VITE_API_BASE_URL` | Frontend `.env.production` | Backend API endpoint (production) | `https://api.example.com` |
 
 ## 🤝 Contributing
 

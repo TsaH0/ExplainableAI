@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useResultStore } from "../store/useResultStore";
+import { getApiUrl, apiConfig } from "../config/api";
 
 export default function ChatBar() {
   const [query, setQuery] = useState("");
@@ -14,7 +15,7 @@ export default function ChatBar() {
     }
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:8000/api/ai", {
+      const res = await axios.post(getApiUrl(apiConfig.endpoints.ai), {
         model: "gemini-2.5-flash",
         query: query,
       });
